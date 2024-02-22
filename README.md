@@ -1,4 +1,4 @@
-# Stackshop
+# Stackshop 🛒
 
 ## Introduction
 #### StackShop is an e-commerce platform designed to offer a personalized shopping experience. Leveraging the secure data handling capabilities of Affinidi Vault, we ensure that user preferences and sensitive information are managed with the utmost care.
@@ -40,8 +40,10 @@ pip install -r requirements.txt
 flask --debug run
 ```
 
+### ⚠️ Incase, You face **HTTP header is larger than 10240 bytes.** Clear the cookies and try again.
+
 ## Features
-### Product Recommendation
+### Product Recommendation (Only for India, Make sure you set Country to India)
 The product recommendation feature is a way to personalize the shopping experience by suggesting items that align with the user's gender and demographics.
 
 How it Works in Code:
@@ -130,3 +132,14 @@ function filterProducts(category) {
 
 
 ## Screenshots
+#### StackShop Homepage:
+![Homepage](https://github.com/codingis4noobs2/stackshop-flask/assets/87560178/d527a8fb-173e-4009-9d77-136927452d5f)
+
+#### Filter Product:
+![filter-product](https://github.com/codingis4noobs2/stackshop-flask/assets/87560178/27d6c66f-e6cd-480f-9163-b7f55cbbd665)
+
+#### Product Recommendations for Indian Users:
+![Recommendations-for-india](https://github.com/codingis4noobs2/stackshop-flask/assets/87560178/78d52267-f36d-42e7-ba7b-63d9e27fac45)
+
+#### Product Recommendations By Gender:
+![recommendations-for-man](https://github.com/codingis4noobs2/stackshop-flask/assets/87560178/631591e8-b739-459b-9550-9a26d2fdf7d1)
