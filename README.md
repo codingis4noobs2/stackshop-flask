@@ -143,3 +143,11 @@ function filterProducts(category) {
 
 #### Product Recommendations By Gender:
 ![recommendations-for-man](https://github.com/codingis4noobs2/stackshop-flask/assets/87560178/631591e8-b739-459b-9550-9a26d2fdf7d1)
+
+#### Checkout on Normal Days:
+![checkout-shop](https://github.com/codingis4noobs2/stackshop-flask/assets/87560178/d4752493-fe78-4797-ae7a-950a094166b8)
+
+#### Checkout on Birthdays:
+![checkout-on-birthday](https://github.com/codingis4noobs2/stackshop-flask/assets/87560178/490624ba-5af2-428f-a991-99065d1753a4)
+
+
