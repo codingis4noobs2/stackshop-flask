@@ -1,0 +1,534 @@
+<!-- home.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StackShop</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+
+  <!-- Main Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-white">
+    <a class="navbar-brand" href="{{ url_for('homepage') }}">StackShop</a>
+
+    <!-- User Profile and Cart -->
+    <div class="d-flex align-items-center ml-auto">
+      <!-- Conditional User Info Display -->
+      {% if user.is_logged_in %}
+      <!-- User Dropdown with Profile Picture and Name -->
+      <div class="dropdown">
+        <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="false">
+          <img src="{{ user.picture }}" alt="User Profile Picture" class="rounded-circle" width="30" height="30">
+          Hello, {{ user.givenName }}
+        </a>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+          <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+        </div>
+      </div>
+      {% else %}
+      <!-- Login Button -->
+      <a class="btn btn-primary ml-2" href="{{ url_for('login') }}">Login</a>
+      {% endif %}
+    </div>
+
+    <!-- Cart -->
+    <a class="nav-link" href="{{ url_for('cart') }}">
+      <i class="fa fa-shopping-cart"></i> Cart🛒 <span id="cart-count">0</span>
+    </a>
+    </div>
+  </nav>
+
+  <!-- Secondary Navbar for Product Categories -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid justify-content-center">
+      <ul class="navbar-nav">
+        <!-- Category Links -->
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="filterProducts('all')">All Products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="filterProducts('bags')">Bags</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="filterProducts('blazers')">Blazers</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="filterProducts('cameras')">Cameras</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="filterProducts('pants')">Pants</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="filterProducts('sunglasses')">Sunglasses</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="filterProducts('traditionals')">Traditionals</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="filterProducts('watches')">Watches</a>
+        </li>
+        {% if user.is_logged_in and user.country.lower() == 'india' %}
+        <li class="nav-item">
+          <a class="nav-link" href="#" id="recommendations" onclick="showRecommendations()">Recommendations for India</a>
+        </li>
+        {% endif %}
+        {% if user.is_logged_in %}
+        {% if user.gender.lower() == 'male' %}
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="filterProductsByGender('male')">Recommendations for Men</a>
+        </li>
+        {% elif user.gender.lower() == 'female' %}
+        <li class="nav-item">
+          <a class="nav-link" href="#" onclick="filterProductsByGender('female')">Recommendations for Women</a>
+        </li>
+        {% endif %}
+        {% endif %}
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Products Section -->
+  <div class="container mt-4">
+    <div class="row">
+      <div class="col-md-4 mb-4 product-card" data-category="bags" data-gender="female">
+        <div class="card">
+          <img src="{{ url_for('static', filename='bags/bag1.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Bag 1</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('bag1', 10.00)">Add to
+                  Cart</button>
+              </div>
+              <small class="text-muted">$10.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="bags" data-gender="female">
+        <div class="card">
+          <img src="{{ url_for('static', filename='bags/bag2.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Bag 2</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('bag2', 12.00)">Add to
+                  Cart</button>
+              </div>
+              <small class="text-muted">$12.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="bags" data-gender="male">
+        <div class="card">
+          <img src="{{ url_for('static', filename='bags/bag3.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Bag 3</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('bag3', 15.00)">Add to
+                  Cart</button>
+              </div>
+              <small class="text-muted">$15.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="blazers" data-gender="male">
+        <div class="card">
+          <img src="{{ url_for('static', filename='blazers/blazer1.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Blazer 1</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('blazer1', 50.00)">Add
+                  to Cart</button>
+              </div>
+              <small class="text-muted">$50.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="blazers" data-gender="female">
+        <div class="card">
+          <img src="{{ url_for('static', filename='blazers/blazer2.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Blazer 2</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('blazer2', 110.00)">Add
+                  to Cart</button>
+              </div>
+              <small class="text-muted">$110.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="blazers" data-gender="male">
+        <div class="card">
+          <img src="{{ url_for('static', filename='blazers/blazer3.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Blazer 3</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('blazer3', 90.00)">Add
+                  to Cart</button>
+              </div>
+              <small class="text-muted">$90.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="cameras">
+        <div class="card">
+          <img src="{{ url_for('static', filename='cameras/cam1.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Camera 1</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('cam1', 509.00)">Add to
+                  Cart</button>
+              </div>
+              <small class="text-muted">$509.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="cameras">
+        <div class="card">
+          <img src="{{ url_for('static', filename='cameras/cam2.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Camera 2</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('cam2', 479.00)">Add to
+                  Cart</button>
+              </div>
+              <small class="text-muted">$479.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="cameras">
+        <div class="card">
+          <img src="{{ url_for('static', filename='cameras/cam3.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Camera 3</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('cam3', 309.00)">Add to
+                  Cart</button>
+              </div>
+              <small class="text-muted">$309.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="pants" data-gender="female">
+        <div class="card">
+          <img src="{{ url_for('static', filename='pants/pant1.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Pant 1</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('pant1', 19.00)">Add to
+                  Cart</button>
+              </div>
+              <small class="text-muted">$19.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="pants" data-gender="male">
+        <div class="card">
+          <img src="{{ url_for('static', filename='pants/pant2.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Pant 2</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('pant2', 14.00)">Add to
+                  Cart</button>
+              </div>
+              <small class="text-muted">$14.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="sunglasses" data-gender="female">
+        <div class="card">
+          <img src="{{ url_for('static', filename='sunglasses/glasses1.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Sunglasses 1</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('glasses1', 39.00)">Add
+                  to Cart</button>
+              </div>
+              <small class="text-muted">$39.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="sunglasses" data-gender="male">
+        <div class="card">
+          <img src="{{ url_for('static', filename='sunglasses/glasses2.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Sunglasses 2</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('glasses2', 39.00)">Add
+                  to Cart</button>
+              </div>
+              <small class="text-muted">$39.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="sunglasses" data-gender="male">
+        <div class="card">
+          <img src="{{ url_for('static', filename='sunglasses/glasses3.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Sunglasses 3</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('glasses3', 39.00)">Add
+                  to Cart</button>
+              </div>
+              <small class="text-muted">$39.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="sunglasses" data-gender="female">
+        <div class="card">
+          <img src="{{ url_for('static', filename='sunglasses/glasses4.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Sunglasses 4</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('glasses4', 49.00)">Add
+                  to Cart</button>
+              </div>
+              <small class="text-muted">$49.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="traditionals" data-gender="male">
+        <div class="card">
+          <img src="{{ url_for('static', filename='traditionals/kurta2.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Kurta 1</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('kurta2', 29.00)">Add to
+                  Cart</button>
+              </div>
+              <small class="text-muted">$29.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="traditionals" data-gender="female">
+        <div class="card">
+          <img src="{{ url_for('static', filename='traditionals/kurti1.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Kurti 1</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('kurti1', 29.00)">Add to
+                  Cart</button>
+              </div>
+              <small class="text-muted">$29.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="traditionals" data-gender="female">
+        <div class="card">
+          <img src="{{ url_for('static', filename='traditionals/saree1.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Saree 1</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('saree1', 34.00)">Add to
+                  Cart</button>
+              </div>
+              <small class="text-muted">$34.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="watches" data-gender="female">
+        <div class="card">
+          <img src="{{ url_for('static', filename='watches/watch1.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Watch 1</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('watch1', 109.00)">Add
+                  to Cart</button>
+              </div>
+              <small class="text-muted">$109.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="watches" data-gender="male">
+        <div class="card">
+          <img src="{{ url_for('static', filename='watches/watch2.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Watch 2</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('watch2', 129.00)">Add
+                  to Cart</button>
+              </div>
+              <small class="text-muted">$129.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 mb-4 product-card" data-category="watches" data-gender="male">
+        <div class="card">
+          <img src="{{ url_for('static', filename='watches/watch3.jpg') }}" class="card-img-top"
+            alt="Fjallraven - Foldsack No. 1 Backpack">
+          <div class="card-body">
+            <h5 class="card-title">Watch 3</h5>
+            <p class="card-text">Your perfect pack for everyday use and walks in the forest. Stash your laptop (up to...
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group">
+                <button type="button" class="btn btn-sm btn-outline-primary" onclick="addToCart('watch3', 100.00)">Add
+                  to Cart</button>
+              </div>
+              <small class="text-muted">$100.00</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ... -->
+
+  <!-- Bootstrap JS and dependencies -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+  <script>
+    function filterProducts(category) {
+      // Get all product cards
+      var products = document.querySelectorAll('.product-card');
+      products.forEach(function (product) {
+        // Check the data-category attribute of the product
+        var productCategory = product.getAttribute('data-category');
+        if (category === 'all' || productCategory === category) {
+          product.style.display = ''; // Show the product
+        } else {
+          product.style.display = 'none'; // Hide the product
+        }
+      });
+    }
+
+    function showRecommendations() {
+      // Clear any existing filters
+      filterProducts('all');
+
+
+      document.querySelectorAll('.product-card').forEach(function (product) {
+        if (product.dataset.category === 'traditionals') {
+          product.style.display = '';
+        }
+        else {
+          product.style.display = 'none';
+        }
+      });
+    }
+
+    function filterProductsByGender(gender) {
+      // Get all product cards
+      var products = document.querySelectorAll('.product-card');
+      products.forEach(function (product) {
+        var productGender = product.getAttribute('data-gender');
+
+        if (productGender === gender) {
+          product.style.display = ''; // Show the product
+        } else {
+          product.style.display = 'none'; // Hide the product
+        }
+      });
+    }
+
+
+  </script>
+</body>
+
+</html>

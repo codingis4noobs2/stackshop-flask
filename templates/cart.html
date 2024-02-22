@@ -1,0 +1,63 @@
+<!-- cart.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <a class="navbar-brand" href="{{ url_for('homepage') }}">StackShop</a>
+        <!-- User Profile and Cart -->
+        <div class="d-flex align-items-center ml-auto">
+            <!-- Conditional User Info Display -->
+            {% if user.is_logged_in %}
+            <!-- User Dropdown with Profile Picture and Name -->
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <img src="{{ user.picture }}" alt="User Profile Picture" class="rounded-circle" width="30"
+                        height="30">
+                    Hello, {{ user.givenName }}
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{{ url_for('logout') }}">Logout</a>
+                </div>
+            </div>
+            {% else %}
+            <!-- Login Button -->
+            <a class="btn btn-primary ml-2" href="{{ url_for('login') }}">Login</a>
+            {% endif %}
+        </div>
+
+        <!-- Cart -->
+        <a class="nav-link" href="{{ url_for('cart') }}">
+            <i class="fa fa-shopping-cart"></i> Cart🛒 <span id="cart-count">0</span>
+        </a>
+        </div>
+    </nav>
+    <div class="container mt-4">
+        <div class="card">
+            <table class="table">
+                <tbody id="cart-items">
+                    <!-- Cart items will be inserted by the JavaScript -->
+                </tbody>
+            </table>
+            <div class="card-footer">
+                Total: <span id="total-price">0</span> USD
+            </div>
+        </div>
+        <button onclick="clearCart()" class="btn btn-danger mt-2">Clear Cart</button>
+        <a class="btn btn-primary mt-2" href="{{ url_for('checkout') }}">Go to Checkout</a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='js/cart.js') }}"></script>
+</body>
+
+</html>
