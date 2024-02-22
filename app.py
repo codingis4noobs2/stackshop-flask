@@ -42,7 +42,7 @@ def homepage():
 
 @app.route('/login')
 def login():
-    redirect_uri = "https://5000-dsa012-fictionalspacepo-frm7wnmds4e.ws-us108.gitpod.io/auth"
+    redirect_uri = "https://stackshop.onrender.com/auth"
     logging.info(f'Redirect URI: {redirect_uri}')
     return oauth.affinidi.authorize_redirect(redirect_uri)
 
